@@ -4,6 +4,9 @@
 [suoha888/Trader-Archives](https://github.com/suoha888/Trader-Archives)（MIT，15 位交易员），前端重新设计：
 纸色底 + 衬线正文（参考早期 Anthropic 官网与 Kimi 研究博客的克制排版）。
 
+线上地址：<https://maplecity1314.github.io/kol-knowledge-database/>
+（`.github/workflows/pages.yml`：每次推送 main、每天 10:17 北京时间、或手动触发时，自动同步上游 → 构建 → 发布 GitHub Pages。）
+
 ## 用法
 
 ```bash
