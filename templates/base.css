@@ -1,0 +1,85 @@
+/* ===== 共用设计变量与基础组件（首页与交易员页共用，构建时内联） ===== */
+:root {
+  --paper: #FAF9F5;
+  --paper-2: #F2F0E8;
+  --paper-3: #EAE6DB;
+  --ink: #1F1E1C;
+  --ink-2: #3D3C38;
+  --muted: #86847C;
+  --rule: #E3DFD4;
+  --accent: #A8532F;
+  --accent-soft: #F3E4D9;
+  --serif: "Noto Serif SC", "Source Serif 4", "Songti SC", serif;
+  --serif-latin: "Source Serif 4", "Noto Serif SC", serif;
+  --sans: "Instrument Sans", "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1A1917; --paper-2: #23221F; --paper-3: #2D2B27;
+    --ink: #EDEAE2; --ink-2: #CFCBC1; --muted: #8E8A80; --rule: #34322D;
+    --accent: #D98E66; --accent-soft: #3A2A21; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #1A1917; --paper-2: #23221F; --paper-3: #2D2B27;
+  --ink: #EDEAE2; --ink-2: #CFCBC1; --muted: #8E8A80; --rule: #34322D;
+  --accent: #D98E66; --accent-soft: #3A2A21; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 120px; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink-2);
+  font-family: var(--serif); font-size: 17px; line-height: 1.9;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+::selection { background: var(--accent-soft); }
+
+.topbar {
+  position: sticky; top: 0; z-index: 30; height: 60px;
+  display: flex; align-items: center; gap: 20px; padding: 0 28px;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--sans); font-size: 14px;
+}
+.wordmark { font-family: var(--serif); font-weight: 700; color: var(--ink); letter-spacing: .08em; text-decoration: none; font-size: 16px; white-space: nowrap; }
+.crumb { color: var(--muted); display: flex; gap: 8px; align-items: center; white-space: nowrap; }
+.crumb a { text-decoration: none; }
+.crumb a:hover { color: var(--ink); }
+.crumb b { color: var(--ink); font-weight: 500; }
+.topbar .spacer { flex: 1; }
+.search {
+  display: flex; align-items: center; gap: 8px; width: min(320px, 40vw);
+  border: 1px solid var(--rule); background: var(--paper-2); border-radius: 999px; padding: 6px 14px;
+}
+.search input { border: 0; outline: 0; background: transparent; width: 100%; font: inherit; color: var(--ink); min-width: 0; }
+.search kbd { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--rule); border-radius: 4px; padding: 0 5px; }
+.icon-btn { border: 1px solid var(--rule); background: transparent; border-radius: 999px; width: 34px; height: 34px; cursor: pointer; display: grid; place-items: center; flex: none; }
+.icon-btn:hover { background: var(--paper-2); }
+
+.eyebrow { font-family: var(--sans); font-size: 12px; letter-spacing: .16em; color: var(--accent); font-weight: 500; text-transform: uppercase; }
+.sec-label { font-family: var(--sans); font-size: 12px; letter-spacing: .16em; color: var(--muted); font-weight: 500; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.sec-label::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; padding: 2px; background: var(--paper-2); flex: none; }
+.seg button { border: 0; background: transparent; padding: 4px 12px; border-radius: 999px; cursor: pointer; color: var(--muted); white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: 0 1px 2px rgb(0 0 0 / .08); }
+
+.site-footer { font-family: var(--sans); font-size: 12px; color: var(--muted); line-height: 1.8; border-top: 1px solid var(--rule); padding-top: 20px; }
+.site-footer a { color: var(--muted); }
+
+.lightbox { position: fixed; inset: 0; z-index: 50; background: rgb(20 19 17 / .88); display: none; place-items: center; cursor: zoom-out; padding: 40px; }
+.lightbox.open { display: grid; }
+.lightbox img { max-width: 100%; max-height: 100%; border-radius: 8px; }
+
+@media (max-width: 980px) {
+  .topbar { padding: 0 16px; gap: 12px; }
+  .crumb { display: none; }
+  .search { width: auto; flex: 1; }
+  .search kbd { display: none; }
+}
