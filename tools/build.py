@@ -16,6 +16,7 @@ import argparse
 import collections
 import html
 import json
+import os
 import re
 import shutil
 import sys
@@ -194,6 +195,14 @@ def build_kol(card: dict, no: int, sync: dict) -> tuple[dict, dict, dict]:
     return meta, data, summary
 
 
+def chat_endpoint() -> str:
+    """AI 助手网关地址：环境变量 CHAT_ENDPOINT 优先，其次是仓库里的 site.config.json。"""
+    if os.environ.get("CHAT_ENDPOINT") is not None:
+        return os.environ["CHAT_ENDPOINT"].strip()
+    cfg = load(ROOT / "site.config.json", {})
+    return str(cfg.get("chatEndpoint") or "").strip()
+
+
 def js(obj) -> str:
     # 内联进 <script>：防止数据中的 "</script>" 提前闭合
     return json.dumps(obj, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
@@ -210,7 +219,12 @@ def main() -> None:
     if not cards:
         sys.exit("未能从 upstream/index.html 解析出名录卡片")
     base_css = (TPL / "base.css").read_text(encoding="utf-8")
-    kol_tpl = (TPL / "kol.html").read_text(encoding="utf-8").replace("/*@@BASE_CSS@@*/", base_css)
+    kol_tpl = ((TPL / "kol.html").read_text(encoding="utf-8")
+               .replace("/*@@BASE_CSS@@*/", base_css)
+               .replace("/*@@CHAT_CSS@@*/", (TPL / "chat.css").read_text(encoding="utf-8"))
+               .replace("/*@@CHAT_JS@@*/", (TPL / "chat.js").read_text(encoding="utf-8")))
+    chat = chat_endpoint()
+    print(f"AI 助手网关：{chat or '未配置（页面不显示问答按钮）'}")
     portal_tpl = (TPL / "portal.html").read_text(encoding="utf-8").replace("/*@@BASE_CSS@@*/", base_css)
 
     SITE.mkdir(exist_ok=True)
@@ -230,7 +244,7 @@ def main() -> None:
         page = (kol_tpl
                 .replace("@@TITLE@@", html.escape(f"{meta['name']} · KOL 知识库"))
                 .replace("@@DESC@@", html.escape(meta["dek"] or meta["lede"][:120]))
-                .replace("/*@@META@@*/null", js(meta))
+                .replace("/*@@META@@*/null", js({**meta, "chat": chat}))
                 .replace("/*@@DATA@@*/null", js(data)))
         (out_dir / "index.html").write_text(page, encoding="utf-8")
         # 首页卡片用的头像拷到站点内

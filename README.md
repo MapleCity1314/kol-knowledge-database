@@ -7,6 +7,8 @@
 线上地址：<https://maplecity1314.github.io/kol-knowledge-database/>
 （`.github/workflows/pages.yml`：每次推送 main、每天 10:17 北京时间、或手动触发时，自动同步上游 → 构建 → 发布 GitHub Pages。）
 
+交易员页面右下角有「问 AI」阅读助手：在本页档案里检索，用免费模型回答，并用 [n] 标注出处，点击可以跳到原推。网关的部署说明见 [gateway/README.md](gateway/README.md)。
+
 ## 用法
 
 ```bash

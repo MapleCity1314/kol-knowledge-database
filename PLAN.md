@@ -1,7 +1,7 @@
 # kol-knowledge-database · 复刻计划
 
 > 目标：参照 [Trader-Archives](https://suoha888.github.io/Trader-Archives/)（[源仓库](https://github.com/suoha888/Trader-Archives)）做一套「推特 KOL 公开推文 → 去噪分类 → 在线阅读站 + 开源数据 + AI 问答」的知识库系统。
-> 状态（2026-11-23）：P0 立项、P1 数据同步、P2 新前端（首页 + 15 个交易员页）已完成并在浏览器验证；P3 AI 助手、P4 部署未开始。用法见 README.md。
+> 状态（2026-11-24）：P0–P2 已完成；P4 已上线 GitHub Pages（每天自动同步）；P3 AI 助手代码已完成并在本地用模拟模型跑通，等申请免费模型 Key 并部署网关（见 gateway/README.md）。
 
 ---
 
@@ -80,7 +80,7 @@ kol-knowledge-database/
 | **P0 · 立项** | `git init`、`.gitignore`（排除同步下来的大文件）；在 Documents 的 `projects.json`、根 README、`03-research/README.md` 里登记 | 登记完成，JSON 和链接校验通过 |
 | **P1 · 数据同步层** | `sync.py`：用 git sparse-checkout 只拉各 KOL 的 `data/`、`docs/`、`images/`（不拉旧 HTML），放进 `upstream/`（不进 git）；生成 `catalog.json`，汇总 15 人的元信息、统计数字和目录结构；记录同步到的上游 commit | 再次运行能增量更新；schema 校验全部通过 |
 | **P2 · 新前端设计** | **按你的新想法**：先定信息架构和视觉方案，做 1 位 KOL 的可交互原型，确认后再推到 15 位 + 总门户 | 浏览器里实际打开并操作通过 |
-| **P3 · AI 助手** | 复用上游的 `ai_rag_index.json`，前端检索 + 自建流式网关（Key 放在服务端） | 浏览器里问答能跳转到原推或小节 |
+| **P3 · AI 助手** | 前端检索 + 自建流式网关（Key 放在服务端）。实际实现**没有用**上游的 `ai_rag_index.json`：它的字段各家不一致（thankucrypto 是 `kol`/`n`），锚点也指向上游页面；改为直接检索页面内嵌的原推、思维模型、长文（切成约 500 字的块）和附录，BM25 + 中文二字切分。模型走免费提供方的回退链：Agnes → 智谱 GLM Flash → Groq / Gemini → DeepSeek（付费兜底） | 浏览器里问答能跳转到原推或小节 |
 | **P4 · 部署与自动同步** | 部署；定时执行 sync → 重新构建 | 线上实际可访问并验证 |
 | **P5（以后）· 自有 KOL 扩充** | 需要收录原站以外的 KOL 时，再实现第 2 节的 ①–⑦ 采集和分类流水线，产出与上游相同的 schema | — |
 

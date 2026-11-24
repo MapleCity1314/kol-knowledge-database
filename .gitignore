@@ -8,3 +8,7 @@ upstream/
 # 构建产物（可随时用 tools/build.py 重建）
 site/
 prototype/data/
+.env*
+!.env.example
+.vercel/
+node_modules/

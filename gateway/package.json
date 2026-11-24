@@ -1,0 +1,10 @@
+{
+  "name": "kol-knowledge-gateway",
+  "private": true,
+  "type": "module",
+  "description": "KOL 知识库 AI 问答网关（无依赖）",
+  "scripts": {
+    "dev": "node dev.mjs",
+    "test": "node test.mjs"
+  }
+}
